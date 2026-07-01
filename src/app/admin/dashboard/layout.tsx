@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getAuthSession } from '@/lib/auth';
+import { FooterAdmin } from '@/components/FooterAdmin';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getAuthSession();
@@ -30,7 +31,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-6 py-8">
+        {children}
+      </main>
+      <FooterAdmin />
     </div>
+    
   );
 }

@@ -1,17 +1,7 @@
 import Link from 'next/link';
-import { getRestaurantInfo } from '@/lib/restaurant';
+import { getRestaurantInfo, extractSocialLinks } from '@/lib/restaurant';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-
-const iconFiles: Record<string, string> = {
-  whatsapp: '/icons/icons8-whatsapp-50.png',
-  instagram: '/icons/icons8-instagram-50.png',
-  facebook: '/icons/icons8-facebook-50.png',
-  x: '/icons/icons8-x-50.png',
-  tiktok: '/icons/icons8-tik-tok-50.png',
-  youtube: '/icons/icons8-youtube-50.png',
-  linkedin: '/icons/icons8-linkedin-50.png',
-};
 
 export const dynamic = 'force-dynamic';
 
@@ -26,15 +16,7 @@ export default async function HomePage() {
     );
   }
 
-  const socialLinks = [
-    { key: 'whatsapp', href: info.whatsapp, icon: 'whatsapp' },
-    { key: 'instagram', href: info.instagram, icon: 'instagram' },
-    { key: 'facebook', href: info.facebook, icon: 'facebook' },
-    { key: 'x', href: info.x, icon: 'x' },
-    { key: 'tiktok', href: info.tiktok, icon: 'tiktok' },
-    { key: 'youtube', href: info.youtube, icon: 'youtube' },
-    { key: 'linkedin', href: info.linkedin, icon: 'linkedin' },
-  ].filter((s) => s.href);
+  const { socialLinks, email } = extractSocialLinks(info);
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -111,47 +93,9 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {socialLinks.length > 0 && (
-          <section className="flex flex-col items-center gap-5 bg-neutral-900 px-6 pb-12 pt-10">
-            <h2 className="text-lg font-bold text-white">Nuestras redes sociales</h2>
-            <div className="flex max-w-[14rem] flex-wrap justify-center gap-3">
-              {socialLinks.map(({ key, href }) => (
-                <a
-                  key={key}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-orange-500"
-                >
-                  <img
-                    src={iconFiles[key]}
-                    alt={key}
-                    className="h-5 w-5"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(47%) sepia(98%) saturate(1516%) hue-rotate(347deg) brightness(98%) contrast(94%)' }}
-                  />
-                </a>
-              ))}
-            </div>
-            {info.email && (
-              <div className="flex flex-col items-center gap-2 pt-2">
-                <h2 className="text-lg font-bold text-white">Contacto</h2>
-                <a href={`mailto:${info.email}`} className="flex items-center gap-2 text-sm text-neutral-400 hover:text-orange-500">
-                  <img
-                    src={'/icons/icons8-envelope-50.png'}
-                    alt={"email"}
-                    className="h-5 w-5"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(47%) sepia(98%) saturate(1516%) hue-rotate(347deg) brightness(98%) contrast(94%)' }}
-                  />
-                  {info.email}
-                </a>
-              </div>
-            )}
-          </section>
-        )}
-
       </main>
 
-      <Footer name={info.name} />
+      <Footer socialLinks={socialLinks} email={email} />
     </div>
   );
 }

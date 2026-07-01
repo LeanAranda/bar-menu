@@ -1,5 +1,10 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
+export interface SocialLink {
+  key: string;
+  href: string;
+}
+
 export interface RestaurantInfo {
   id: number;
   name: string;
@@ -59,5 +64,20 @@ export async function getMenu() {
   return {
     categories: categories.results,
     products: products.results,
+  };
+}
+
+export function extractSocialLinks(info: RestaurantInfo): { socialLinks: SocialLink[]; email: string } {
+  return {
+    socialLinks: [
+      { key: 'whatsapp', href: info.whatsapp },
+      { key: 'instagram', href: info.instagram },
+      { key: 'facebook', href: info.facebook },
+      { key: 'x', href: info.x },
+      { key: 'tiktok', href: info.tiktok },
+      { key: 'youtube', href: info.youtube },
+      { key: 'linkedin', href: info.linkedin },
+    ].filter((s) => s.href),
+    email: info.email,
   };
 }

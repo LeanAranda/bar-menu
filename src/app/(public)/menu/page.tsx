@@ -1,5 +1,5 @@
 import type { Category, Product } from '@/lib/restaurant';
-import { getRestaurantInfo, getMenu } from '@/lib/restaurant';
+import { getRestaurantInfo, getMenu, extractSocialLinks } from '@/lib/restaurant';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
@@ -10,6 +10,8 @@ export default async function MenuPage() {
     getRestaurantInfo(),
     getMenu(),
   ]);
+
+  const { socialLinks, email } = info ? extractSocialLinks(info) : { socialLinks: [], email: '' };
 
   return (
     <div className="min-h-screen bg-white">
@@ -71,7 +73,7 @@ export default async function MenuPage() {
         )}
       </main>
 
-      <Footer name={info?.name ?? 'Menú'} />
+      <Footer socialLinks={socialLinks} email={email} />
     </div>
   );
 }
