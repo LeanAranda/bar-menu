@@ -51,5 +51,6 @@ next-env.d.ts
 
 !.dev.vars.example
 
-# IDE
+# vscode
 .vscode
+/src/app/bar-menu.code-workspace

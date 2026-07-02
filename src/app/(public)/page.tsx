@@ -38,7 +38,7 @@ export default async function HomePage() {
               {info.name}
             </h1>
 
-            <p className="mb-10 max-w-md text-lg text-neutral-200">
+            <p className="mb-10 max-w-md text-lg text-neutral-200 whitespace-pre-line">
               {info.description}
             </p>
 

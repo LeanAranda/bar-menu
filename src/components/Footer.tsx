@@ -17,7 +17,7 @@ const iconFiles: Record<string, string> = {
 
 const orangeFilter = 'brightness(0) saturate(100%) invert(47%) sepia(98%) saturate(1516%) hue-rotate(347deg) brightness(98%) contrast(94%)';
 
-export function Footer({socialLinks, email }: FooterProps) {
+export function Footer({ socialLinks, email }: FooterProps) {
   return (
     <footer className="bg-neutral-900">
       {(socialLinks && socialLinks.length > 0) && (
@@ -41,22 +41,24 @@ export function Footer({socialLinks, email }: FooterProps) {
               </a>
             ))}
           </div>
-          {email && (
-            <div className="flex flex-col items-center gap-2 pt-2">
-              <h2 className="text-lg font-bold text-white">Contacto</h2>
-              <a href={`mailto:${email}`} className="flex items-center gap-2 text-sm text-neutral-400 hover:text-orange-500">
-                <img
-                  src={'/icons/icons8-envelope-50.png'}
-                  alt={"email"}
-                  className="h-5 w-5"
-                  style={{ filter: orangeFilter }}
-                />
-                {email}
-              </a>
-            </div>
-          )}
         </section>
       )}
+
+      {email && (
+        <section className="flex flex-col items-center gap-2 px-6 pb-5 pt-6">
+          <h2 className="text-lg font-bold text-white">Contacto</h2>
+          <a href={`mailto:${email}`} className="flex items-center gap-2 text-sm text-neutral-400 hover:text-orange-500">
+            <img
+              src={'/icons/icons8-envelope-50.png'}
+              alt={"email"}
+              className="h-5 w-5"
+              style={{ filter: orangeFilter }}
+            />
+            {email}
+          </a>
+        </section>
+      )}
+
       <div className="px-6 py-6 text-center text-sm text-neutral-400">
         &copy; Copyright {"Bar Menú"} {2026}
         <br />
