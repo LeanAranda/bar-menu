@@ -55,18 +55,6 @@ export default async function HomePage() {
         </section>
 
         <section className="mx-auto max-w-lg space-y-4 px-6 pb-18 pt-15">
-          <div className="flex items-start gap-4 border-b border-neutral-100 pb-4">
-            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-50">
-              <svg className="h-4 w-4 text-orange-600" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-neutral-900">Dirección</p>
-              <p className="text-sm text-neutral-500">{info.address}</p>
-            </div>
-          </div>
 
           <div className="flex items-start gap-4 border-b border-neutral-100 pb-4">
             <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-50">
@@ -80,7 +68,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4 border-b border-neutral-100 pb-4">
             <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-50">
               <svg className="h-4 w-4 text-orange-600" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -91,7 +79,28 @@ export default async function HomePage() {
               <p className="text-sm text-neutral-500 whitespace-pre-line">{info.hours}</p>
             </div>
           </div>
+
+          <div className="flex items-start gap-4">
+            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-50">
+              <svg className="h-4 w-4 text-orange-600" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-neutral-900">Dirección</p>
+              <p className="text-sm text-neutral-500">{info.address}</p>
+            </div>
+          </div>
+
         </section>
+
+        <div className="mx-auto mb-18 h-[400px] max-w-4xl overflow-hidden rounded-xl border border-neutral-100">
+          <iframe src={"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1459.440444945965!2d-58.33503934770991!3d-34.79756486711761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a32dce21ffcd57%3A0xf28e19a7a4b40ec9!2sPlaza%20de%20la%20Copa!5e0!3m2!1ses-419!2sar!4v1783105453430!5m2!1ses-419!2sar"}
+           className="w-full h-full"  
+           allowFullScreen={false} loading="lazy" referrerPolicy="strict-origin-when-cross-origin">
+           </iframe>
+        </div>
 
       </main>
 
