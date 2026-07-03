@@ -10,7 +10,8 @@ export function AdminHeader() {
         </div>
         <div className="flex items-center gap-4">
           <form action="/api/auth/logout" method="POST">
-            <button className="rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-600 transition-colors hover:bg-neutral-100">
+            <button className="rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-600 transition-colors 
+            hover:bg-neutral-100 hover:cursor-pointer">
               Cerrar sesión
             </button>
           </form>

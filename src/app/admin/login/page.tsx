@@ -80,7 +80,8 @@ export default function AdminLoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 
+                hover:text-neutral-600 hover:cursor-pointer"
                 tabIndex={-1}
               >
                 {showPassword ? (
@@ -104,7 +105,8 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-neutral-800 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg bg-neutral-800 px-4 py-2.5 text-sm font-semibold text-white transition-colors 
+            hover:bg-neutral-700 hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>

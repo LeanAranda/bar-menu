@@ -71,7 +71,8 @@ export function AdminSidebar() {
         {/* Desktop toggle */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mx-auto mb-4 hidden h-7 w-7 items-center justify-center rounded-md text-neutral-800 hover:bg-neutral-100 hover:text-neutral-600 md:flex"
+          className="mx-auto mb-4 hidden h-7 w-7 items-center justify-center rounded-md text-neutral-800 
+          hover:bg-neutral-100 hover:text-neutral-600 hover:cursor-pointer md:flex"
           aria-label={expanded ? 'Contraer menú' : 'Expandir menú'}
         >
           <svg
