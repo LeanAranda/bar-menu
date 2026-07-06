@@ -10,16 +10,20 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { name, sort_order } = await request.json() as { name: string; sort_order?: number };
+  const { name } = await request.json() as { name: string };
 
   if (!name || !name.trim()) {
     return NextResponse.json({ error: 'El nombre es obligatorio' }, { status: 400 });
   }
 
   const db = getDB();
+  const row = await db
+    .prepare('SELECT COALESCE(MAX(sort_order), 0) + 1 AS next_order FROM categories')
+    .first() as { next_order: number };
+
   const result = await db
     .prepare('INSERT INTO categories (name, sort_order) VALUES (?, ?) RETURNING *')
-    .bind(name.trim(), sort_order ?? 0)
+    .bind(name.trim(), row.next_order)
     .first();
 
   return NextResponse.json(result, { status: 201 });
