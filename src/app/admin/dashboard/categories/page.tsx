@@ -1,11 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import MessageBanner, { type BannerMessage } from '@/components/MessageBanner';
 import ReorderControls from '@/components/ReorderControls';
 import InlineEditField from '@/components/InlineEditField';
+import ActionButtons from '@/components/ActionButtons';
+import { useFlipAnimation } from '@/hooks/useFlipAnimation';
+import { useConfirmDelete } from '@/hooks/useConfirmDelete';
 
 interface Category {
   id: number;
@@ -20,10 +23,20 @@ export default function CategoriesPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editName, setEditName] = useState('');
   const [message, setMessage] = useState<BannerMessage | null>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const posMapRef = useRef<Map<number, number>>(new Map());
-  const reorderPendingRef = useRef(false);
-  const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [createName, setCreateName] = useState('');
+  const createRef = useRef<HTMLInputElement>(null);
+  const { listRef, snapshotPositions } = useFlipAnimation('data-cat-id', categories);
+  const { deleteTarget, handleDelete, confirmDelete, cancelDelete } = useConfirmDelete<Category>(
+    '/api/admin/categories',
+    {
+      onSuccess: () => {
+        setMessage({ type: 'success', text: 'Categoría eliminada. Productos movidos a "Sin categoría".' });
+        load();
+      },
+      onError: (text) => setMessage({ type: 'error', text }),
+    }
+  );
 
   async function load() {
     const res = await fetch('/api/admin/categories');
@@ -33,69 +46,6 @@ export default function CategoriesPage() {
   }
 
   useEffect(() => { load(); }, []);
-
-  const snapshotPositions = useCallback(() => {
-    const map = new Map<number, number>();
-    if (listRef.current) {
-      listRef.current.querySelectorAll<HTMLElement>('[data-cat-id]').forEach((el) => {
-        const id = Number(el.dataset.catId);
-        const rect = el.getBoundingClientRect();
-        if (rect.width > 0) map.set(id, rect.top);
-      });
-    }
-    posMapRef.current = map;
-    reorderPendingRef.current = true;
-  }, []);
-
-  // FLIP animation after reorder
-  useEffect(() => {
-    if (!reorderPendingRef.current) return;
-    const container = listRef.current;
-    if (!container) return;
-
-    const map = posMapRef.current;
-    if (map.size === 0) return;
-
-    const els = container.querySelectorAll<HTMLElement>('[data-cat-id]');
-    const moves: { el: HTMLElement; dy: number }[] = [];
-
-    els.forEach((el) => {
-      const id = Number(el.dataset.catId);
-      const oldTop = map.get(id);
-      if (oldTop !== undefined) {
-        const newTop = el.getBoundingClientRect().top;
-        const dy = oldTop - newTop;
-        if (Math.abs(dy) > 0.5) {
-          moves.push({ el, dy });
-        }
-      }
-    });
-
-    if (moves.length === 0) return;
-
-    requestAnimationFrame(() => {
-      moves.forEach(({ el, dy }) => {
-        el.style.transition = 'none';
-        el.style.transform = `translateY(${dy}px)`;
-      });
-      requestAnimationFrame(() => {
-        moves.forEach(({ el }) => {
-          el.style.transition = 'transform 300ms ease';
-          el.style.transform = '';
-        });
-        setTimeout(() => {
-          moves.forEach(({ el }) => {
-            el.style.transition = '';
-            el.style.transform = '';
-          });
-        }, 300);
-      });
-    });
-
-    posMapRef.current = new Map();
-    reorderPendingRef.current = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categories]);
 
   function startEdit(cat: Category) {
     setEditingId(cat.id);
@@ -176,64 +126,80 @@ export default function CategoriesPage() {
     load();
   }
 
-  async function handleDelete(cat: Category) {
-    setDeleteTarget(cat);
-  }
-
-  async function confirmDelete() {
-    if (!deleteTarget) return;
-    const cat = deleteTarget;
-    setDeleteTarget(null);
-    const res = await fetch(`/api/admin/categories/${cat.id}`, { method: 'DELETE' });
-    if (res.ok) {
-      setMessage({ type: 'success', text: 'Categoría eliminada. Productos movidos a "Sin categoría".' });
-      load();
-    } else {
-      const err = await res.json() as { error?: string };
-      setMessage({ type: 'error', text: err.error || 'Error al eliminar.' });
-    }
-  }
-
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.currentTarget;
-    const name = new FormData(form).get('name') as string;
-    if (!name.trim()) return;
+    if (!createName.trim()) return;
+    setShowCreate(false);
     const res = await fetch('/api/admin/categories', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name.trim(), sort_order: categories.length }),
+      body: JSON.stringify({ name: createName.trim() }),
     });
     if (res.ok) {
       setMessage({ type: 'success', text: 'Categoría creada.' });
+      setCreateName('');
       load();
-      form.reset();
     } else {
       const err = await res.json() as { error?: string };
       setMessage({ type: 'error', text: err.error || 'Error al crear.' });
     }
   }
 
+  function openCreate() {
+    setCreateName('');
+    setShowCreate(true);
+    setTimeout(() => createRef.current?.focus(), 0);
+  }
+
+  function cancelCreate() {
+    setShowCreate(false);
+    setCreateName('');
+  }
+
+  const sinCategoria = (cat: Category) => cat.name === 'Sin categoría';
+
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-neutral-800 text-center">Categorías</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-neutral-800">Categorías</h1>
+        <button
+          onClick={openCreate}
+          className="flex items-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer"
+        >
+          + Nueva categoría
+        </button>
+      </div>
 
       <MessageBanner message={message} onDismiss={() => setMessage(null)} />
 
-      <form onSubmit={handleCreate} className="mb-6 flex items-center gap-3">
-        <input
-          name="name"
-          placeholder="Nombre de la nueva categoría"
-          required
-          className="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-        />
-        <button
-          type="submit"
-          className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer"
-        >
-          + Agregar
-        </button>
-      </form>
+      {showCreate && (
+        <form onSubmit={handleCreate} className="mb-6 flex flex-col gap-3 md:flex-row md:items-center">
+          <input
+            ref={createRef}
+            value={createName}
+            onChange={(e) => setCreateName(e.target.value)}
+            placeholder="Nombre de la nueva categoría"
+            required
+            className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 md:flex-1"
+          />
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              disabled={!createName.trim()}
+              className="flex-1 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer disabled:opacity-50 md:flex-none"
+            >
+              Agregar
+            </button>
+            <button
+              type="button"
+              onClick={cancelCreate}
+              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-50 hover:cursor-pointer md:flex-none"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
 
       {loading ? (
         <p className="text-neutral-500">Cargando...</p>
@@ -297,22 +263,12 @@ export default function CategoriesPage() {
                           </button>
                         </div>
                       ) : (
-                        <div className="flex justify-end gap-2">
-                          <button
-                            onClick={() => startEdit(cat)}
-                            className="rounded-lg border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-600 hover:bg-neutral-50 hover:cursor-pointer"
-                          >
-                            Editar
-                          </button>
-                          <button
-                            onClick={() => handleDelete(cat)}
-                            disabled={cat.name === 'Sin categoría'}
-                            title={cat.name === 'Sin categoría' ? 'No se puede eliminar' : undefined}
-                            className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-500 hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-                          >
-                            Eliminar
-                          </button>
-                        </div>
+                        <ActionButtons
+                          onEdit={() => startEdit(cat)}
+                          onDelete={() => handleDelete(cat)}
+                          disableDelete={sinCategoria(cat)}
+                          deleteTitle={sinCategoria(cat) ? 'No se puede eliminar' : undefined}
+                        />
                       )}
                     </td>
                   </tr>
@@ -366,22 +322,12 @@ export default function CategoriesPage() {
                     <span className={`text-sm font-medium ${cat.active ? 'text-neutral-800' : 'text-neutral-400'}`}>
                       {cat.name}
                     </span>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => startEdit(cat)}
-                        className="rounded-lg border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-600 hover:bg-neutral-50"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleDelete(cat)}
-                        disabled={cat.name === 'Sin categoría'}
-                        title={cat.name === 'Sin categoría' ? 'No se puede eliminar' : undefined}
-                        className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
+                    <ActionButtons
+                      onEdit={() => startEdit(cat)}
+                      onDelete={() => handleDelete(cat)}
+                      disableDelete={sinCategoria(cat)}
+                      deleteTitle={sinCategoria(cat) ? 'No se puede eliminar' : undefined}
+                    />
                   </div>
                 )}
               </div>
@@ -395,7 +341,7 @@ export default function CategoriesPage() {
         title="Eliminar categoría"
         message={`¿Eliminar "${deleteTarget?.name}"? Los productos pasarán a "Sin categoría".`}
         onConfirm={confirmDelete}
-        onCancel={() => setDeleteTarget(null)}
+        onCancel={cancelDelete}
       />
     </div>
   );

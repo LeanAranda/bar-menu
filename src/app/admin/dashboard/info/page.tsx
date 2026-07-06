@@ -84,7 +84,7 @@ export default function InfoPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-neutral-800 text-center">Información del restaurante</h1>
+      <h1 className="mb-6 text-2xl font-bold text-neutral-800 text-start">Información del restaurante</h1>
 
       <MessageBanner message={message} onDismiss={() => setMessage(null)} />
 
