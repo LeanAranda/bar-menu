@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, FormEvent } from 'react';
+import MessageBanner, { type BannerMessage } from '@/components/MessageBanner';
 
 interface InfoData {
   name: string;
@@ -40,7 +41,7 @@ const socialFields: { key: keyof InfoData; label: string }[] = [
 export default function InfoPage() {
   const [data, setData] = useState<InfoData | null>(null);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<BannerMessage | null>(null);
   const [socialOpen, setSocialOpen] = useState(false);
 
   useEffect(() => {
@@ -85,62 +86,60 @@ export default function InfoPage() {
     <div>
       <h1 className="mb-6 text-2xl font-bold text-neutral-800 text-center">Información del restaurante</h1>
 
-      {message && (
-        <div
-          className={`mb-4 rounded-lg border px-4 py-3 text-sm ${message.type === 'success'
-              ? 'border-green-200 bg-green-50 text-green-700'
-              : 'border-red-200 bg-red-50 text-red-700'
-            }`}
-        >
-          {message.text}
-        </div>
-      )}
+      <MessageBanner message={message} onDismiss={() => setMessage(null)} />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {mainFields.map(({ key, label, type }) => (
-          <div key={key}>
-            <label className="mb-1 block text-sm font-medium text-neutral-700">{label}</label>
-            {key === 'description' || key === 'hours' ? (
-              <textarea
-                value={data[key]}
-                onChange={(e) => setData({ ...data, [key]: e.target.value })}
-                rows={3}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-              />
-            ) : (
-              <input
-                type={type || 'text'}
-                value={data[key]}
-                onChange={(e) => setData({ ...data, [key]: e.target.value })}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
-              />
-            )}
+      <form onSubmit={handleSubmit}>
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+          <div className="border-b border-neutral-100 bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-600">
+            Información general
           </div>
-        ))}
+          <div className="divide-y divide-neutral-100">
+            {mainFields.map(({ key, label, type }) => (
+              <div key={key} className="px-4 py-3">
+                <label className="mb-1 block text-sm font-medium text-neutral-700">{label}</label>
+                {key === 'description' || key === 'hours' ? (
+                  <textarea
+                    value={data[key]}
+                    onChange={(e) => setData({ ...data, [key]: e.target.value })}
+                    rows={3}
+                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                  />
+                ) : (
+                  <input
+                    type={type || 'text'}
+                    value={data[key]}
+                    onChange={(e) => setData({ ...data, [key]: e.target.value })}
+                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
 
-        <div className="border-t border-neutral-200 pt-4">
-          <button
-            type="button"
-            onClick={() => setSocialOpen(!socialOpen)}
-            className="flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-800 hover:cursor-pointer"
-          >
-            <svg
-              className="h-4 w-4 transition-transform duration-200"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              style={{ transform: socialOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
+          <div className="border-t border-neutral-100 bg-neutral-50 px-4 py-3">
+            <button
+              type="button"
+              onClick={() => setSocialOpen(!socialOpen)}
+              className="flex w-full items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-800 hover:cursor-pointer"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-            <p className="text-sm font-medium text-black">Redes sociales</p> <span className="text-neutral-500 font-normal">(opcional)</span>
-          </button>
+              <svg
+                className="h-4 w-4 transition-transform duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                style={{ transform: socialOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+              Redes sociales <span className="text-neutral-500 font-normal">(opcional)</span>
+            </button>
+          </div>
 
           {socialOpen && (
-            <div className="mt-4 space-y-4">
+            <div className="divide-y divide-neutral-100 border-t border-neutral-100">
               {socialFields.map(({ key, label }) => (
-                <div key={key}>
+                <div key={key} className="px-4 py-3">
                   <label className="mb-1 block text-sm font-medium text-neutral-700">{label}</label>
                   <input
                     type="text"
@@ -153,7 +152,8 @@ export default function InfoPage() {
             </div>
           )}
         </div>
-        <div className="flex justify-center pt-4 ">
+
+        <div className="mt-6 flex justify-center">
           <button
             type="submit"
             disabled={saving}
