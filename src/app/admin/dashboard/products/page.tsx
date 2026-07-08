@@ -151,7 +151,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-neutral-800">Productos</h1>
         <button
@@ -175,11 +175,12 @@ export default function ProductsPage() {
               <h2 className="mb-2 text-lg font-semibold text-neutral-700 text-center">{group.name}</h2>
 
               {/* Desktop table */}
-              <div className="hidden overflow-hidden rounded-xl border border-neutral-200 bg-white md:block">
+              <div className="hidden overflow-x-auto rounded-xl border border-neutral-200 bg-white md:block">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-neutral-100 bg-neutral-50 text-left text-neutral-600">
                       <th className="w-20 px-4 py-3 font-medium">Orden</th>
+                      <th className="w-14 px-4 py-3 font-medium">Img</th>
                       <th className="px-4 py-3 font-medium">Nombre</th>
                       <th className="w-48 px-4 py-3 font-medium">Precio</th>
                       <th className="w-28 px-4 py-3 font-medium">Disponible</th>
@@ -200,6 +201,13 @@ export default function ProductsPage() {
                               onMoveDown={() => moveDown(prod)}
                               compact
                             />
+                          </td>
+                          <td className="px-4 py-3">
+                            {prod.image_url ? (
+                              <img src={prod.image_url} alt="" className="h-10 w-10 rounded-lg border border-neutral-200 object-cover" />
+                            ) : (
+                              <span className="block h-10 w-10 rounded-lg border border-neutral-100 bg-neutral-50" />
+                            )}
                           </td>
                           <td className="px-4 py-3">
                             <span className={prod.available ? '' : 'text-neutral-400'}>{prod.name}</span>
@@ -231,21 +239,26 @@ export default function ProductsPage() {
                   const idxInGroup = catProductsIndex(prod);
                   const totalInGroup = catProductsCount(group.id);
                   return (
-                    <div key={prod.id} data-prod-id={prod.id} className="rounded-xl border border-neutral-200 bg-white p-4">
-                      <div className="mb-3 flex items-center justify-between">
-                        <ReorderControls
-                          index={idxInGroup}
-                          total={totalInGroup}
-                          onMoveUp={() => moveUp(prod)}
-                          onMoveDown={() => moveDown(prod)}
-                          showHash
-                        />
+                    <div key={prod.id} data-prod-id={prod.id} className="overflow-hidden rounded-xl border border-neutral-200 bg-white p-4">
+                      <div className="mb-3 flex items-center justify-between gap-2">
+                        <div className="min-w-0 shrink">
+                          <ReorderControls
+                            index={idxInGroup}
+                            total={totalInGroup}
+                            onMoveUp={() => moveUp(prod)}
+                            onMoveDown={() => moveDown(prod)}
+                            showHash
+                          />
+                        </div>
                         <ToggleSwitch checked={prod.available} onChange={() => toggleAvailable(prod)} />
                       </div>
 
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className={`text-sm font-medium ${prod.available ? 'text-neutral-800' : 'text-neutral-400'}`}>
+                      <div className="flex items-center gap-3">
+                        {prod.image_url ? (
+                          <img src={prod.image_url} alt="" className="h-10 w-10 flex-shrink-0 rounded-lg border border-neutral-200 object-cover" />
+                        ) : null}
+                        <div className="min-w-0 flex-1">
+                          <p className={`text-sm font-medium truncate ${prod.available ? 'text-neutral-800' : 'text-neutral-400'}`}>
                             {prod.name}
                           </p>
                           <div className="flex items-center gap-2">
@@ -254,6 +267,8 @@ export default function ProductsPage() {
                             </p>
                           </div>
                         </div>
+                      </div>
+                      <div className="mt-3 flex items-center gap-1">
                         <ActionButtons
                           onEdit={() => openEdit(prod)}
                           onDelete={() => handleDelete(prod)}

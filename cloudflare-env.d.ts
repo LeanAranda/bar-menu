@@ -22,12 +22,99 @@ interface D1Result {
 	error?: unknown;
 }
 
+interface R2Bucket {
+	head(key: string): Promise<R2Object | null>;
+	get(key: string, options?: R2GetOptions): Promise<R2ObjectBody | null>;
+	put(key: string, value: ReadableStream | ArrayBuffer | ArrayBufferView | string | Blob, options?: R2PutOptions): Promise<R2Object>;
+	delete(key: string): Promise<void>;
+	list(options?: R2ListOptions): Promise<R2Objects>;
+}
+
+interface R2Object {
+	key: string;
+	checksum: string;
+	size: number;
+	etag: string;
+	httpEtag: string;
+	uploaded: Date;
+	httpMetadata?: R2HTTPMetadata;
+	customMetadata?: Record<string, string>;
+	range?: R2Range;
+	storageClass: string;
+}
+
+interface R2ObjectBody extends R2Object {
+	body: ReadableStream;
+	bodyUsed: boolean;
+	arrayBuffer(): Promise<ArrayBuffer>;
+	text(): Promise<string>;
+	json<T>(): Promise<T>;
+	blob(): Promise<Blob>;
+}
+
+interface R2HTTPMetadata {
+	contentType?: string;
+	contentLanguage?: string;
+	contentDisposition?: string;
+	contentEncoding?: string;
+	cacheControl?: string;
+	cacheExpiry?: Date;
+}
+
+interface R2GetOptions {
+	onlyIf?: R2Conditional;
+	range?: R2Range;
+}
+
+interface R2PutOptions {
+	onlyIf?: R2Conditional;
+	httpMetadata?: R2HTTPMetadata;
+	customMetadata?: Record<string, string>;
+	md5?: ArrayBuffer | string;
+	sha1?: ArrayBuffer | string;
+	sha256?: ArrayBuffer | string;
+	sha384?: ArrayBuffer | string;
+	sha512?: ArrayBuffer | string;
+}
+
+interface R2Conditional {
+	etagMatches?: string;
+	etagDoesNotMatch?: string;
+	uploadedBefore?: Date;
+	uploadedAfter?: Date;
+	secondsBefore?: number;
+	secondsAfter?: number;
+}
+
+interface R2Range {
+	offset?: number;
+	length?: number;
+	suffix?: number;
+}
+
+interface R2ListOptions {
+	limit?: number;
+	prefix?: string;
+	cursor?: string;
+	delimiter?: string;
+	startAfter?: string;
+	include?: string[];
+}
+
+interface R2Objects {
+	objects: R2Object[];
+	truncated: boolean;
+	cursor?: string;
+	delimitedPrefixes: string[];
+}
+
 interface __BaseEnv_CloudflareEnv {
 	IMAGES: ImagesBinding;
 	ASSETS: Fetcher;
 	NEXTJS_ENV: string;
 	WORKER_SELF_REFERENCE: Fetcher /* bar-menu */;
 	bar_menu_db: D1Database;
+	bar_menu_images: R2Bucket;
 }
 declare namespace Cloudflare {
 	interface Env extends __BaseEnv_CloudflareEnv {}

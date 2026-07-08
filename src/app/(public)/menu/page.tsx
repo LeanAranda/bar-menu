@@ -38,8 +38,15 @@ export default async function MenuPage() {
                   {catProducts.map((product) => (
                     <div
                       key={product.id}
-                      className="flex items-start justify-between gap-4 py-3"
+                      className="flex items-start gap-3 py-3"
                     >
+                      {product.image_url && (
+                        <img
+                          src={product.image_url}
+                          alt=""
+                          className="mt-0.5 h-12 w-12 flex-shrink-0 rounded-lg border border-neutral-200 object-cover"
+                        />
+                      )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="text-base font-semibold text-neutral-900">{product.name}</h3>
