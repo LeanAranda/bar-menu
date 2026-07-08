@@ -12,6 +12,9 @@ export function Header({ name }: { name: string }) {
         </Link>
 
         <nav className="flex items-center gap-8 text-sm">
+          <Link href="/admin/login" className="text-neutral-400 transition-colors hover:text-orange-500">
+            Admin
+          </Link>
           <Link href="/" className="text-neutral-400 transition-colors hover:text-orange-500">
             Inicio
           </Link>
