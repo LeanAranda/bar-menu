@@ -34,7 +34,7 @@ export default async function HomePage() {
               <img src="/logos/logo.png" alt={info.name} className="h-full w-full object-contain" />
             </div>
 
-            <h1 className="mb-3 text-4xl font-bold tracking-tight text-white sm:text-5xl bar-menu-title">
+            <h1 className="bar-menu-title mb-3 text-5xl font-bold tracking-tight text-white sm:text-5xl">
               {info.name}
             </h1>
 

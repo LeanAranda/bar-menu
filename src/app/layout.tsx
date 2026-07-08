@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geom, Slabo_27px } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const geom = Geom({
+	variable: "--font-geom",
 	subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
+const slabo = Slabo_27px({
+	weight: "400",
+	variable: "--font-slabo",
 	subsets: ["latin"],
 });
 
@@ -27,7 +28,7 @@ export default function RootLayout({
 			<head>
 				<link rel="icon" href="/logos/logo-icon.ico" type="image/svg+xml"></link>
 			</head>
-			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+			<body className={`${geom.variable} ${slabo.variable} antialiased`}>{children}</body>
 		</html>
 	);
 }
