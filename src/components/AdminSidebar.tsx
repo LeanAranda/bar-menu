@@ -36,8 +36,10 @@ const links = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const sidebarExpanded = expanded || mobileOpen;
 
   return (
     <>
@@ -52,6 +54,14 @@ export function AdminSidebar() {
         </svg>
       </button>
 
+      {/* Desktop overlay backdrop */}
+      {expanded && (
+        <div
+          className="fixed inset-0 z-30 hidden bg-black/50 md:block"
+          onClick={() => setExpanded(false)}
+        />
+      )}
+
       {/* Mobile overlay backdrop */}
       {mobileOpen && (
         <div
@@ -62,18 +72,15 @@ export function AdminSidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`${
-          expanded ? 'w-56' : 'w-16'
-        } fixed bottom-0 left-0 top-0 z-40 flex shrink-0 flex-col border-r border-neutral-200 bg-white py-4 transition-all duration-200 md:static md:z-0 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}
+        className={`fixed bottom-0 left-0 top-0 z-40 flex flex-col border-r border-neutral-200 bg-white py-4 transition-all duration-200 ${
+          sidebarExpanded ? 'w-56' : 'w-16'
+        } ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
       >
-        {/* Desktop toggle */}
+        {/* Toggle (desktop) */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mx-auto mb-4 hidden h-7 w-7 items-center justify-center rounded-md text-neutral-800 
-          hover:bg-neutral-100 hover:text-neutral-600 hover:cursor-pointer md:flex"
-          aria-label={expanded ? 'Contraer menú' : 'Expandir menú'}
+          className="mx-auto mb-4 hidden h-7 w-7 items-center justify-center rounded-md text-neutral-800 hover:bg-neutral-100 hover:text-neutral-600 hover:cursor-pointer md:flex"
+          aria-label={sidebarExpanded ? 'Contraer menú' : 'Expandir menú'}
         >
           <svg
             className="h-4 w-4 transition-transform duration-200"
@@ -81,22 +88,24 @@ export function AdminSidebar() {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            style={{ transform: sidebarExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
           </svg>
         </button>
 
         {/* Mobile close */}
-        <button
-          onClick={() => setMobileOpen(false)}
-          className="ml-auto mr-3 mb-4 flex h-7 w-7 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 md:hidden"
-          aria-label="Cerrar menú"
-        >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
-        </button>
+        {mobileOpen && (
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="ml-auto mr-3 mb-4 flex h-7 w-7 items-center justify-center rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 md:hidden"
+            aria-label="Cerrar menú"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
 
         <nav className="flex flex-1 flex-col gap-1 px-3">
           {links.map(({ href, label, icon }) => {
@@ -105,16 +114,16 @@ export function AdminSidebar() {
               <Link
                 key={href}
                 href={href}
-                onClick={() => setMobileOpen(false)}
+                onClick={() => { setMobileOpen(false); setExpanded(false); }}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   active
                     ? 'bg-orange-50 text-orange-700'
                     : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800'
                 }`}
-                title={expanded ? undefined : label}
+                title={sidebarExpanded ? undefined : label}
               >
                 <span className="shrink-0">{icon}</span>
-                <span className={`overflow-hidden whitespace-nowrap transition-all duration-200 ${expanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
+                <span className={`overflow-hidden whitespace-nowrap transition-all duration-200 ${sidebarExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
                   {label}
                 </span>
               </Link>
@@ -128,12 +137,12 @@ export function AdminSidebar() {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-neutral-800 transition-colors hover:bg-neutral-100 hover:text-orange-600"
-            title={expanded ? undefined : 'Ver sitio público'}
+            title={sidebarExpanded ? undefined : 'Ver sitio público'}
           >
             <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
-            <span className={`overflow-hidden whitespace-nowrap transition-all duration-200 ${expanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
+            <span className={`overflow-hidden whitespace-nowrap transition-all duration-200 ${sidebarExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
               Ver sitio público
             </span>
           </a>
