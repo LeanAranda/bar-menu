@@ -10,8 +10,10 @@ export default function ProductPrice({
   isOffer: boolean;
 }) {
   return (
-    <>
-      <span>$ {Number(price).toLocaleString('es-AR')}</span>
+    <div className="flex items-center gap-2">
+      <span className="text-md font-bold text-neutral-800">
+        $ {Number(price).toLocaleString('es-AR')}
+      </span>
       {isOffer && oldPrice != null && (
         <span className="text-xs text-neutral-400 line-through">
           $ {Number(oldPrice).toLocaleString('es-AR')}
@@ -22,6 +24,6 @@ export default function ProductPrice({
           Oferta
         </span>
       )}
-    </>
+    </div>
   );
 }

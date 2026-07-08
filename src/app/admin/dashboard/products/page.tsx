@@ -204,9 +204,11 @@ export default function ProductsPage() {
                           </td>
                           <td className="px-4 py-3">
                             {prod.image_url ? (
-                              <img src={prod.image_url} alt="" className="h-10 w-10 rounded-lg border border-neutral-200 object-cover" />
+                              <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-neutral-200">
+                                <img src={prod.image_url} alt="" className="h-full w-full object-cover" />
+                              </div>
                             ) : (
-                              <span className="block h-10 w-10 rounded-lg border border-neutral-100 bg-neutral-50" />
+                              <span className="block h-12 w-12 flex-shrink-0 rounded-lg border border-neutral-100 bg-neutral-50" />
                             )}
                           </td>
                           <td className="px-4 py-3">
@@ -234,41 +236,43 @@ export default function ProductsPage() {
               </div>
 
               {/* Mobile cards */}
-              <div className="space-y-2 md:hidden">
+              <div className="space-y-3 md:hidden">
                 {groupProducts(group.id).map((prod) => {
                   const idxInGroup = catProductsIndex(prod);
                   const totalInGroup = catProductsCount(group.id);
                   return (
-                    <div key={prod.id} data-prod-id={prod.id} className="overflow-hidden rounded-xl border border-neutral-200 bg-white p-4">
-                      <div className="mb-3 flex items-center justify-between gap-2">
-                        <div className="min-w-0 shrink">
-                          <ReorderControls
-                            index={idxInGroup}
-                            total={totalInGroup}
-                            onMoveUp={() => moveUp(prod)}
-                            onMoveDown={() => moveDown(prod)}
-                            showHash
-                          />
-                        </div>
+                    <div key={prod.id} data-prod-id={prod.id} className="rounded-xl border border-neutral-200 bg-white">
+                      {/* Top bar: reorder + availability */}
+                      <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-2.5">
+                        <ReorderControls
+                          index={idxInGroup}
+                          total={totalInGroup}
+                          onMoveUp={() => moveUp(prod)}
+                          onMoveDown={() => moveDown(prod)}
+                          showHash
+                        />
                         <ToggleSwitch checked={prod.available} onChange={() => toggleAvailable(prod)} />
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        {prod.image_url ? (
-                          <img src={prod.image_url} alt="" className="h-10 w-10 flex-shrink-0 rounded-lg border border-neutral-200 object-cover" />
-                        ) : null}
+                      {/* Body: image + name + price */}
+                      <div className="flex items-center gap-3 px-4 py-3">
+                        {prod.image_url && (
+                          <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-neutral-200">
+                            <img src={prod.image_url} alt="" className="h-full w-full object-cover" />
+                          </div>
+                        )}
                         <div className="min-w-0 flex-1">
-                          <p className={`text-sm font-medium truncate ${prod.available ? 'text-neutral-800' : 'text-neutral-400'}`}>
+                          <p className={`text-sm font-semibold ${prod.available ? 'text-neutral-800' : 'text-neutral-400'}`}>
                             {prod.name}
                           </p>
-                          <div className="flex items-center gap-2">
-                            <p className="text-sm text-neutral-600">
-                              <ProductPrice price={prod.price} oldPrice={prod.old_price} isOffer={!!prod.is_offer} />
-                            </p>
+                          <div className="mt-1">
+                            <ProductPrice price={prod.price} oldPrice={prod.old_price} isOffer={!!prod.is_offer} />
                           </div>
                         </div>
                       </div>
-                      <div className="mt-3 flex items-center gap-1">
+
+                      {/* Bottom: actions */}
+                      <div className="border-t border-neutral-100 px-4 py-2.5">
                         <ActionButtons
                           onEdit={() => openEdit(prod)}
                           onDelete={() => handleDelete(prod)}

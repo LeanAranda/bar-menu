@@ -41,11 +41,13 @@ export default async function MenuPage() {
                       className="flex items-start gap-3 py-3"
                     >
                       {product.image_url && (
-                        <img
-                          src={product.image_url}
-                          alt=""
-                          className="mt-0.5 h-12 w-12 flex-shrink-0 rounded-lg border border-neutral-200 object-cover"
-                        />
+                        <div className="mt-0.5 h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-neutral-200">
+                          <img
+                            src={product.image_url}
+                            alt=""
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">

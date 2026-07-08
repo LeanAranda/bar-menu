@@ -280,8 +280,9 @@ export default function CategoriesPage() {
           {/* Mobile cards */}
           <div className="space-y-3 md:hidden">
             {categories.map((cat, i) => (
-              <div key={cat.id} data-cat-id={cat.id} className="rounded-xl border border-neutral-200 bg-white p-4">
-                <div className="mb-3 flex items-center justify-between">
+              <div key={cat.id} data-cat-id={cat.id} className="rounded-xl border border-neutral-200 bg-white">
+                {/* Top bar: reorder + active */}
+                <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-2.5">
                   <ReorderControls
                     index={i}
                     total={categories.length}
@@ -293,15 +294,17 @@ export default function CategoriesPage() {
                 </div>
 
                 {editingId === cat.id ? (
-                  <div className="space-y-3">
-                    <InlineEditField
-                      value={editName}
-                      onChange={setEditName}
-                      onSave={() => saveEdit(cat)}
-                      onCancel={cancelEdit}
-                      mobile
-                    />
-                    <div className="flex gap-2">
+                  <>
+                    <div className="px-4 py-3">
+                      <InlineEditField
+                        value={editName}
+                        onChange={setEditName}
+                        onSave={() => saveEdit(cat)}
+                        onCancel={cancelEdit}
+                        mobile
+                      />
+                    </div>
+                    <div className="flex gap-2 border-t border-neutral-100 px-4 py-2.5">
                       <button
                         onClick={() => saveEdit(cat)}
                         disabled={!editName.trim()}
@@ -316,19 +319,23 @@ export default function CategoriesPage() {
                         Cancelar
                       </button>
                     </div>
-                  </div>
+                  </>
                 ) : (
-                  <div className="flex items-center justify-between">
-                    <span className={`text-sm font-medium ${cat.active ? 'text-neutral-800' : 'text-neutral-400'}`}>
-                      {cat.name}
-                    </span>
-                    <ActionButtons
-                      onEdit={() => startEdit(cat)}
-                      onDelete={() => handleDelete(cat)}
-                      disableDelete={sinCategoria(cat)}
-                      deleteTitle={sinCategoria(cat) ? 'No se puede eliminar' : undefined}
-                    />
-                  </div>
+                  <>
+                    <div className="px-4 py-3">
+                      <p className={`text-sm font-semibold ${cat.active ? 'text-neutral-800' : 'text-neutral-400'}`}>
+                        {cat.name}
+                      </p>
+                    </div>
+                    <div className="border-t border-neutral-100 px-4 py-2.5">
+                      <ActionButtons
+                        onEdit={() => startEdit(cat)}
+                        onDelete={() => handleDelete(cat)}
+                        disableDelete={sinCategoria(cat)}
+                        deleteTitle={sinCategoria(cat) ? 'No se puede eliminar' : undefined}
+                      />
+                    </div>
+                  </>
                 )}
               </div>
             ))}

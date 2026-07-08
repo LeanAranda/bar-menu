@@ -1,7 +1,7 @@
 export function AdminFooter() {
   return (
     <footer className="border-t border-neutral-200 bg-white px-6 py-6 md:pl-[88px]">
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-1 text-center text-sm 
+      <div className="mx-auto flex flex-col items-center gap-1 text-center text-sm 
         md:flex-row md:justify-between md:text-left">
         <p className="text-neutral-400">
           &copy; Copyright {"Bar Menú"} {2026}
