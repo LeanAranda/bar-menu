@@ -5,7 +5,7 @@ import { jwtVerify } from 'jose';
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname === '/admin/login') {
+  if (pathname === '/admin/login' || pathname === '/api/admin/users') {
     return NextResponse.next();
   }
 
