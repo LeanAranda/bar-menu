@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Geom, Slabo_27px } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geom = Geom({
+const geom = localFont({
+	src: "../../public/fonts/Geom-VariableFont_wght.ttf",
 	variable: "--font-geom",
-	subsets: ["latin"],
 });
 
-const slabo = Slabo_27px({
-	weight: "400",
+const slabo = localFont({
+	src: "../../public/fonts/Slabo13px-Regular.ttf",
 	variable: "--font-slabo",
-	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
