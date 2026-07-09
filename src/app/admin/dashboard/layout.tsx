@@ -3,6 +3,12 @@ import { getAuthSession } from '@/lib/auth';
 import { AdminHeader } from '@/components/AdminHeader';
 import { AdminSidebar } from '@/components/AdminSidebar';
 import { AdminFooter } from '@/components/AdminFooter';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Bar Menu | Dashboard',
+  icons: { icon: "/logos/dashboard-icon.ico" },
+};
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getAuthSession();

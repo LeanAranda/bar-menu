@@ -14,7 +14,8 @@ const slabo = localFont({
 
 export const metadata: Metadata = {
 	title: "Bar Menu",
-	description: "Descubrí nuestra propuesta gastronómica",
+	description: "Bienvenido a Bar Menu. Descubrí nuestras ofertas y seguinos en nuestras redes.",
+	icons: { icon: "/logos/logo-icon.ico" },
 };
 
 export default function RootLayout({
@@ -24,9 +25,6 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<head>
-				<link rel="icon" href="/logos/logo-icon.ico" type="image/svg+xml"></link>
-			</head>
 			<body className={`${geom.variable} ${slabo.variable} antialiased`}>{children}</body>
 		</html>
 	);
