@@ -63,7 +63,7 @@ export function Footer({ socialLinks, email }: FooterProps) {
         &copy; Copyright {"Bar Menú"} {2026}
         <br />
         Desarrollado por{' '}
-        <a href="https://www.linkedin.com/in/leandroaranda/" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">
+        <a href="/" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">
           Lean Aranda
         </a>
       </div>
