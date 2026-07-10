@@ -213,7 +213,7 @@ export default function CategoriesPage() {
               <thead>
                 <tr className="border-b border-neutral-100 bg-neutral-50 text-left text-neutral-600">
                   <th className="w-20 px-4 py-3 font-medium">Orden</th>
-                  <th className="px-4 py-3 font-medium">Nombre</th>
+                  <th className="w-64 max-w-64 px-4 py-3 font-medium">Nombre</th>
                   <th className="w-28 px-4 py-3 font-medium">Activa</th>
                   <th className="w-44 px-4 py-3 text-right font-medium">Acciones</th>
                 </tr>
@@ -230,7 +230,7 @@ export default function CategoriesPage() {
                         compact
                       />
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="w-64 max-w-64 px-4 py-3">
                       {editingId === cat.id ? (
                         <InlineEditField
                           value={editName}
@@ -239,7 +239,7 @@ export default function CategoriesPage() {
                           onCancel={cancelEdit}
                         />
                       ) : (
-                        <span className={cat.active ? '' : 'text-neutral-400'}>{cat.name}</span>
+                        <span className={`block truncate ${cat.active ? '' : 'text-neutral-400'}`}>{cat.name}</span>
                       )}
                     </td>
                     <td className="px-4 py-3">

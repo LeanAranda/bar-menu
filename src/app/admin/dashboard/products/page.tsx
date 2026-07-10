@@ -181,8 +181,8 @@ export default function ProductsPage() {
                     <tr className="border-b border-neutral-100 bg-neutral-50 text-left text-neutral-600">
                       <th className="w-20 px-4 py-3 font-medium">Orden</th>
                       <th className="w-14 px-4 py-3 font-medium">Img</th>
-                      <th className="px-4 py-3 font-medium">Nombre</th>
-                      <th className="w-56 px-4 py-3 font-medium">Descripción</th>
+                      <th className="w-64 max-w-64 px-4 py-3 font-medium">Nombre</th>
+                      <th className="px-4 py-3 font-medium">Descripción</th>
                       <th className="w-48 px-4 py-3 font-medium">Precio</th>
                       <th className="w-28 px-4 py-3 font-medium">Disponible</th>
                       <th className="w-44 px-4 py-3 text-right font-medium">Acciones</th>
@@ -212,10 +212,10 @@ export default function ProductsPage() {
                               <span className="block h-12 w-12 flex-shrink-0 rounded-lg border border-neutral-100 bg-neutral-50" />
                             )}
                           </td>
-                          <td className="px-4 py-3">
-                            <span className={prod.available ? '' : 'text-neutral-400'}>{prod.name}</span>
+                          <td className="w-64 max-w-64 px-4 py-3">
+                            <span className={`block truncate ${prod.available ? '' : 'text-neutral-400'}`}>{prod.name}</span>
                           </td>
-                          <td className="px-4 py-3 text-neutral-500 max-w-56">
+                          <td className="px-4 py-3 text-neutral-500">
                             <span className="line-clamp-2">{prod.description || '—'}</span>
                           </td>
                           <td className="px-4 py-3">

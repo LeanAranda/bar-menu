@@ -54,7 +54,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-lg space-y-4 px-6 pb-18 pt-15">
+        <section className="mx-auto max-w-lg space-y-4 px-6 pb-15 pt-15">
 
           <div className="flex items-start gap-4 border-b border-neutral-100 pb-4">
             <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-50">
@@ -95,12 +95,23 @@ export default async function HomePage() {
 
         </section>
 
-        <div className="mx-auto mb-18 h-[400px] max-w-4xl overflow-hidden rounded-xl border border-neutral-100">
+        <div className="mx-auto mb-6 h-[400px] max-w-4xl overflow-hidden rounded-xl border border-neutral-100">
           <iframe src={"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1459.440444945965!2d-58.33503934770991!3d-34.79756486711761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a32dce21ffcd57%3A0xf28e19a7a4b40ec9!2sPlaza%20de%20la%20Copa!5e0!3m2!1ses-419!2sar!4v1783105453430!5m2!1ses-419!2sar"}
-           className="w-full h-full"  
-           allowFullScreen={false} loading="lazy" referrerPolicy="strict-origin-when-cross-origin">
-           </iframe>
+            className="w-full h-full"
+            allowFullScreen={false} loading="lazy" referrerPolicy="strict-origin-when-cross-origin">
+          </iframe>
         </div>
+
+        {/*
+        <div className="mx-auto mb-6 h-[400px] max-w-4xl overflow-hidden rounded-xl border border-neutral-100">
+          <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=-58.345,-34.807,-58.325,-34.788&layer=mapnik&marker=-34.79756,-58.33504"
+            className="h-full w-full"
+            loading="lazy"
+            title="Mapa estático OSM"
+          />
+        </div>
+        */}
 
       </main>
 
