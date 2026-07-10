@@ -22,7 +22,7 @@ export default function MenuProductCardGrid({ product }: { product: Product }) {
       <div className="flex flex-1 flex-col justify-between gap-1 p-3">
         <h3 className="text-md font-semibold text-neutral-900">{product.name}</h3>
         {!!product.description && (
-          <p className="text-xs leading-relaxed text-neutral-500 whitespace-pre-line">{product.description}</p>
+          <p className="text-sm leading-relaxed text-neutral-500 whitespace-pre-line">{product.description}</p>
         )}
         {product.old_price !== null && product.old_price !== undefined ? (
           <div className="flex items-center gap-1.5">
