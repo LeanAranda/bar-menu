@@ -20,7 +20,7 @@ export default function MenuProductCard({ product }: { product: Product }) {
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         <h3 className="text-base font-semibold text-neutral-900">{product.name}</h3>
         {!!product.description && (
-          <p className="text-sm leading-relaxed text-neutral-500">{product.description}</p>
+          <p className="text-sm leading-relaxed text-neutral-500 whitespace-pre-line">{product.description}</p>
         )}
       </div>
 

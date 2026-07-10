@@ -175,13 +175,14 @@ export default function ProductsPage() {
               <h2 className="mb-2 text-lg font-semibold text-neutral-700 text-center">{group.name}</h2>
 
               {/* Desktop table */}
-              <div className="hidden overflow-x-auto rounded-xl border border-neutral-200 bg-white md:block">
+              <div className="hidden overflow-x-auto rounded-xl border border-neutral-200 bg-white lg:block">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-neutral-100 bg-neutral-50 text-left text-neutral-600">
                       <th className="w-20 px-4 py-3 font-medium">Orden</th>
                       <th className="w-14 px-4 py-3 font-medium">Img</th>
                       <th className="px-4 py-3 font-medium">Nombre</th>
+                      <th className="w-56 px-4 py-3 font-medium">Descripción</th>
                       <th className="w-48 px-4 py-3 font-medium">Precio</th>
                       <th className="w-28 px-4 py-3 font-medium">Disponible</th>
                       <th className="w-44 px-4 py-3 text-right font-medium">Acciones</th>
@@ -214,6 +215,9 @@ export default function ProductsPage() {
                           <td className="px-4 py-3">
                             <span className={prod.available ? '' : 'text-neutral-400'}>{prod.name}</span>
                           </td>
+                          <td className="px-4 py-3 text-neutral-500 max-w-56">
+                            <span className="line-clamp-2">{prod.description || '—'}</span>
+                          </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2 whitespace-nowrap">
                               <ProductPrice price={prod.price} oldPrice={prod.old_price} isOffer={!!prod.is_offer} />
@@ -236,7 +240,7 @@ export default function ProductsPage() {
               </div>
 
               {/* Mobile cards */}
-              <div className="space-y-3 md:hidden">
+              <div className="space-y-3 lg:hidden">
                 {groupProducts(group.id).map((prod) => {
                   const idxInGroup = catProductsIndex(prod);
                   const totalInGroup = catProductsCount(group.id);
@@ -265,6 +269,11 @@ export default function ProductsPage() {
                           <p className={`text-sm font-semibold ${prod.available ? 'text-neutral-800' : 'text-neutral-400'}`}>
                             {prod.name}
                           </p>
+                          {prod.description && (
+                            <p className="mt-0.5 text-xs leading-relaxed text-neutral-500 line-clamp-2">
+                              {prod.description}
+                            </p>
+                          )}
                           <div className="mt-1">
                             <ProductPrice price={prod.price} oldPrice={prod.old_price} isOffer={!!prod.is_offer} />
                           </div>

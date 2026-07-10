@@ -11,6 +11,7 @@ interface Product {
   id: number;
   category_id: number;
   name: string;
+  description: string | null;
   price: number;
   old_price: number | null;
   is_offer: boolean;
@@ -128,7 +129,8 @@ export default function ProductDialog({
     const raw_old = parseFloat(oldPrice);
     const old_price = !isNaN(raw_old) ? raw_old : null;
 
-    const body: Record<string, unknown> = { name: name.trim(), category_id, price, is_offer, old_price };
+    const description = fd.get('description') as string;
+    const body: Record<string, unknown> = { name: name.trim(), category_id, price, description: description.trim() || '', is_offer, old_price };
 
     const res = await fetch(`/api/admin/products${isEdit ? `/${product!.id}` : ''}`, {
       method: isEdit ? 'PUT' : 'POST',
@@ -222,6 +224,17 @@ export default function ProductDialog({
               required
               defaultValue={product?.name ?? ''}
               className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-medium text-neutral-500">Descripción</label>
+            <textarea
+              name="description"
+              rows={3}
+              placeholder="Descripción del producto (opcional)"
+              defaultValue={product?.description ?? ''}
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 resize-none"
             />
           </div>
 

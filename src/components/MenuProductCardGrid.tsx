@@ -20,21 +20,21 @@ export default function MenuProductCardGrid({ product }: { product: Product }) {
         <div className="aspect-[4/3] w-full bg-neutral-100" />
       )}
       <div className="flex flex-1 flex-col justify-between gap-1 p-3">
-        <h3 className="text-sm font-semibold text-neutral-900">{product.name}</h3>
+        <h3 className="text-md font-semibold text-neutral-900">{product.name}</h3>
         {!!product.description && (
-          <p className="text-xs leading-relaxed text-neutral-500 line-clamp-2">{product.description}</p>
+          <p className="text-xs leading-relaxed text-neutral-500 whitespace-pre-line">{product.description}</p>
         )}
         {product.old_price !== null && product.old_price !== undefined ? (
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-neutral-400 line-through">
+            <span className="text-sm text-neutral-400 line-through">
               ${Number(product.old_price).toLocaleString('es-AR')}
             </span>
-            <span className="text-sm font-bold text-orange-600">
+            <span className="text-xl font-bold text-orange-600">
               ${Number(product.price).toLocaleString('es-AR')}
             </span>
           </div>
         ) : (
-          <span className="text-sm font-bold text-neutral-900">
+          <span className="text-xl font-bold text-neutral-900">
             ${Number(product.price).toLocaleString('es-AR')}
           </span>
         )}
