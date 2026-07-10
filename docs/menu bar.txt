@@ -1,0 +1,77 @@
+El UUID para desarrollo local es: cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d
+
+Tutorial: POST /api/admin/users
+
+1. En desarrollo local
+
+Los archivos .env.local y .dev.vars ya tienen el token configurado. 
+Probá directamente:
+
+# Crear un nuevo usuario
+curl -X POST http://localhost:3000/api/admin/users \
+  -H "Content-Type: application/json" \
+  -d '{"mode":"create","username":"editor","newPassword":"editor123","token":"cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d"}'
+
+# Cambiar contraseña del admin
+curl -X POST http://localhost:3000/api/admin/users \
+  -H "Content-Type: application/json" \
+  -d '{"mode":"update","username":"admin","newPassword":"admin456","token":"cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d"}'
+
+
+2. En producción (primer y único setup)
+
+# 1. Configurar el token secreto en Cloudflare (hacélo una sola vez)
+npx wrangler secret put AUTH_CHANGE_PASSWORD_TOKEN
+
+# Cuando pida el valor, pegá:
+# cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d
+# (o cualquier otro UUID que quieras usar como token)
+
+# 2. Redeployar la app
+pnpm run deploy
+
+
+3. Usar desde cualquier lado (producción)
+
+# Crear usuario
+curl -X POST https://tudominio.com/api/admin/users \
+  -H "Content-Type: application/json" \
+  -d '{"mode":"create","username":"editor","newPassword":"Pass123","token":"cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d"}'
+
+# Cambiar contraseña
+curl -X POST https://tudominio.com/api/admin/users \
+  -H "Content-Type: application/json" \
+  -d '{"mode":"update","username":"admin","newPassword":"Nueva123","token":"cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d"}'
+
+# Eliminar usuario
+Invoke-RestMethod -Uri http://localhost:3000/api/admin/users -Method Post -ContentType "application/json" -Body '{"mode":"delete","username":"editor","token":"cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d"}'
+
+4. Respuestas posibles
+
+Código	Significado
+200	{ "success": true, "action": "created" }
+200	{ "success": true, "action": "updated" }
+400	Faltan campos o password < 6 caracteres
+401	Token inválido
+404	Usuario no encontrado (en mode update)
+409	El usuario ya existe (en mode create)
+500	Error interno
+
+En Postman:
+1. Method: POST
+2. URL: http://localhost:3000/api/admin/users
+3. Headers: Content-Type: application/json
+4. Body → raw → JSON:
+{
+  "mode": "create",
+  "username": "editor",
+  "newPassword": "editor123",
+  "token": "cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d"
+}
+
+Para setear los secrets en el deploy:
+npx wrangler secret put AUTH_SECRET
+# Pegás: 4415a178ded3809145abb584c968bddfdb116b7081636bc47b46b6f8a6ececa3
+
+npx wrangler secret put AUTH_CHANGE_PASSWORD_TOKEN
+# Pegás: cb6b1291-7e3a-4b8a-b18c-3b01f9aeac1d
