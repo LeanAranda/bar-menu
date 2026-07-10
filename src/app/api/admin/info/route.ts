@@ -41,13 +41,24 @@ export async function PUT(request: NextRequest) {
 
   const setClause = updates.map((k) => `${k} = ?`).join(', ');
   const values = updates.map((k) => body[k]);
-  values.push(new Date().toISOString());
 
   try {
-    await db
-      .prepare(`UPDATE restaurant_info SET ${setClause}, updated_at = ? WHERE id = 1`)
-      .bind(...values)
-      .run();
+    const existing = await db.prepare('SELECT id FROM restaurant_info LIMIT 1').first();
+
+    if (existing) {
+      values.push(new Date().toISOString());
+      await db
+        .prepare(`UPDATE restaurant_info SET ${setClause}, updated_at = ? WHERE id = 1`)
+        .bind(...values)
+        .run();
+    } else {
+      const cols = updates.join(', ');
+      const placeholders = updates.map(() => '?').join(', ');
+      await db
+        .prepare(`INSERT INTO restaurant_info (${cols}) VALUES (${placeholders})`)
+        .bind(...values)
+        .run();
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
