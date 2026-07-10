@@ -84,6 +84,48 @@ curl -X POST http://localhost:3000/api/admin/users \
   -d '{"mode":"delete","username":"editor","token":"el-token-que-configuraste"}'
 ```
 
+## Deploy
+
+### Setup inicial (una sola vez)
+
+1. **Crear el D1 database en Cloudflare:**
+   ```bash
+   wrangler d1 create bar-menu-db
+   ```
+   Copiar el `database_id` que devuelve y actualizarlo en `wrangler.jsonc`.
+
+2. **Crear el R2 bucket:**
+   ```bash
+   wrangler r2 bucket create bar-menu-images
+   ```
+
+3. **Aplicar migraciones:**
+   ```bash
+   wrangler d1 migrations apply bar-menu-db --remote
+   ```
+
+4. **Generar un token de API de Cloudflare:**
+   Ir a [API Tokens](https://dash.cloudflare.com/profile/api-tokens), crear uno con permisos:
+   - Workers R/W
+   - D1 R/W
+   - R2 R/W
+
+5. **Agregar secrets a GitHub** (`Settings → Secrets and variables → Actions → Repository secrets`):
+   - `CLOUDFLARE_API_TOKEN` → el token del paso anterior
+   - `AUTH_SECRET` → el mismo que en `.env.local`
+   - `AUTH_CHANGE_PASSWORD_TOKEN` → el mismo que en `.env.local`
+
+### CI/CD automático
+
+El workflow en `.github/workflows/deploy.yml` deploya automáticamente al pushear a `main`:
+
+1. Instala dependencias
+2. Aplica migraciones D1 remotas
+3. Build + deploy del worker
+4. Configura `AUTH_SECRET` y `AUTH_CHANGE_PASSWORD_TOKEN` como secrets en Cloudflare
+
+También se puede ejecutar manualmente desde Actions → Deploy to Cloudflare → Run workflow.
+
 ## Migraciones
 
 Para resetear la DB local:

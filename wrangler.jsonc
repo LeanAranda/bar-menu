@@ -66,5 +66,5 @@
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
-	"vars": { "AUTH_SECRET": "4415a178ded3809145abb584c968bddfdb116b7081636bc47b46b6f8a6ececa3" }
+	"vars": {}
 }
