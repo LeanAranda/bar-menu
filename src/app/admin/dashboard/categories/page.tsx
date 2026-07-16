@@ -25,9 +25,11 @@ export default function CategoriesPage() {
   const [message, setMessage] = useState<BannerMessage | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [createName, setCreateName] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const createRef = useRef<HTMLInputElement>(null);
   const { listRef, snapshotPositions } = useFlipAnimation('data-cat-id', categories);
-  const { deleteTarget, handleDelete, confirmDelete, cancelDelete } = useConfirmDelete<Category>(
+  const { deleteTarget, handleDelete, confirmDelete, cancelDelete, submitting: deleteSubmitting } = useConfirmDelete<Category>(
     '/api/admin/categories',
     {
       onSuccess: () => {
@@ -58,90 +60,126 @@ export default function CategoriesPage() {
   }
 
   async function saveEdit(cat: Category) {
-    if (!editName.trim()) return;
-    const res = await fetch(`/api/admin/categories/${cat.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: editName.trim() }),
-    });
-    if (res.ok) {
-      setMessage({ type: 'success', text: 'Categoría actualizada.' });
-      setEditingId(null);
-      load();
-    } else {
-      setMessage({ type: 'error', text: 'Error al actualizar.' });
+    if (!editName.trim() || submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/admin/categories/${cat.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: editName.trim() }),
+      });
+      if (res.ok) {
+        setMessage({ type: 'success', text: 'Categoría actualizada.' });
+        setEditingId(null);
+        load();
+      } else {
+        setMessage({ type: 'error', text: 'Error al actualizar.' });
+      }
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   }
 
   async function toggleActive(cat: Category) {
-    const res = await fetch(`/api/admin/categories/${cat.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: !cat.active }),
-    });
-    if (res.ok) {
-      load();
-    } else {
-      setMessage({ type: 'error', text: 'Error al cambiar estado.' });
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/admin/categories/${cat.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ active: !cat.active }),
+      });
+      if (res.ok) {
+        load();
+      } else {
+        setMessage({ type: 'error', text: 'Error al cambiar estado.' });
+      }
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   }
 
   async function moveUp(index: number) {
-    if (index === 0) return;
-    const current = categories[index];
-    const above = categories[index - 1];
-    snapshotPositions();
-    await Promise.all([
-      fetch(`/api/admin/categories/${current.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: above.sort_order }),
-      }),
-      fetch(`/api/admin/categories/${above.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: current.sort_order }),
-      }),
-    ]);
-    load();
+    if (index === 0 || submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const current = categories[index];
+      const above = categories[index - 1];
+      snapshotPositions();
+      await Promise.all([
+        fetch(`/api/admin/categories/${current.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: above.sort_order }),
+        }),
+        fetch(`/api/admin/categories/${above.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: current.sort_order }),
+        }),
+      ]);
+      load();
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
   }
 
   async function moveDown(index: number) {
-    if (index === categories.length - 1) return;
-    const current = categories[index];
-    const below = categories[index + 1];
-    snapshotPositions();
-    await Promise.all([
-      fetch(`/api/admin/categories/${current.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: below.sort_order }),
-      }),
-      fetch(`/api/admin/categories/${below.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: current.sort_order }),
-      }),
-    ]);
-    load();
+    if (index === categories.length - 1 || submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const current = categories[index];
+      const below = categories[index + 1];
+      snapshotPositions();
+      await Promise.all([
+        fetch(`/api/admin/categories/${current.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: below.sort_order }),
+        }),
+        fetch(`/api/admin/categories/${below.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: current.sort_order }),
+        }),
+      ]);
+      load();
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
   }
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!createName.trim()) return;
-    setShowCreate(false);
-    const res = await fetch('/api/admin/categories', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: createName.trim() }),
-    });
-    if (res.ok) {
-      setMessage({ type: 'success', text: 'Categoría creada.' });
-      setCreateName('');
-      load();
-    } else {
-      const err = await res.json() as { error?: string };
-      setMessage({ type: 'error', text: err.error || 'Error al crear.' });
+    if (!createName.trim() || submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      setShowCreate(false);
+      const res = await fetch('/api/admin/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: createName.trim() }),
+      });
+      if (res.ok) {
+        setMessage({ type: 'success', text: 'Categoría creada.' });
+        setCreateName('');
+        load();
+      } else {
+        const err = await res.json() as { error?: string };
+        setMessage({ type: 'error', text: err.error || 'Error al crear.' });
+      }
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   }
 
@@ -185,10 +223,10 @@ export default function CategoriesPage() {
           <div className="flex gap-2">
             <button
               type="submit"
-              disabled={!createName.trim()}
+              disabled={!createName.trim() || submitting}
               className="flex-1 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer disabled:opacity-50 md:flex-none"
             >
-              Agregar
+              {submitting ? 'Agregando...' : 'Agregar'}
             </button>
             <button
               type="button"
@@ -228,6 +266,7 @@ export default function CategoriesPage() {
                         onMoveUp={() => moveUp(i)}
                         onMoveDown={() => moveDown(i)}
                         compact
+                        disabled={submitting}
                       />
                     </td>
                     <td className="w-64 max-w-64 px-4 py-3">
@@ -243,14 +282,14 @@ export default function CategoriesPage() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <ToggleSwitch checked={cat.active} onChange={() => toggleActive(cat)} />
+                      <ToggleSwitch checked={cat.active} onChange={() => toggleActive(cat)} disabled={submitting} />
                     </td>
                     <td className="px-4 py-3 text-right">
                       {editingId === cat.id ? (
                         <div className="flex justify-end gap-2">
                           <button
                             onClick={() => saveEdit(cat)}
-                            disabled={!editName.trim()}
+                            disabled={!editName.trim() || submitting}
                             className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-orange-500 hover:cursor-pointer disabled:opacity-50"
                           >
                             Guardar
@@ -289,8 +328,9 @@ export default function CategoriesPage() {
                     onMoveUp={() => moveUp(i)}
                     onMoveDown={() => moveDown(i)}
                     showHash
+                    disabled={submitting}
                   />
-                  <ToggleSwitch checked={cat.active} onChange={() => toggleActive(cat)} />
+                  <ToggleSwitch checked={cat.active} onChange={() => toggleActive(cat)} disabled={submitting} />
                 </div>
 
                 {editingId === cat.id ? (
@@ -307,10 +347,10 @@ export default function CategoriesPage() {
                     <div className="flex gap-2 border-t border-neutral-100 px-4 py-2.5">
                       <button
                         onClick={() => saveEdit(cat)}
-                        disabled={!editName.trim()}
-                        className="flex-1 rounded-lg bg-orange-600 py-2 text-sm font-semibold text-white hover:bg-orange-500 disabled:opacity-50"
-                      >
-                        Guardar
+                        disabled={!editName.trim() || submitting}
+                          className="flex-1 rounded-lg bg-orange-600 py-2 text-sm font-semibold text-white hover:bg-orange-500 disabled:opacity-50"
+                        >
+                          Guardar
                       </button>
                       <button
                         onClick={cancelEdit}
@@ -349,6 +389,7 @@ export default function CategoriesPage() {
         message={`¿Eliminar "${deleteTarget?.name}"? Los productos pasarán a "Sin categoría".`}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
+        disabled={deleteSubmitting}
       />
     </div>
   );

@@ -53,4 +53,4 @@ next-env.d.ts
 
 # vscode
 .vscode
-/src/app/bar-menu.code-workspace
+bar-menu.code-workspace

@@ -23,6 +23,7 @@ export default function ReorderControls({
   onMoveDown,
   compact,
   showHash,
+  disabled,
 }: {
   index: number;
   total: number;
@@ -30,6 +31,7 @@ export default function ReorderControls({
   onMoveDown: () => void;
   compact?: boolean;
   showHash?: boolean;
+  disabled?: boolean;
 }) {
   const btnClass = compact
     ? 'flex h-6 w-6 items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:cursor-pointer hover:text-neutral-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:cursor-not-allowed'
@@ -37,13 +39,13 @@ export default function ReorderControls({
 
   return (
     <div className="flex items-center gap-1">
-      <button onClick={onMoveUp} disabled={index === 0} className={btnClass}>
+      <button onClick={onMoveUp} disabled={disabled || index === 0} className={btnClass}>
         <ArrowUp className="h-3 w-3" />
       </button>
       <span className={`text-center text-neutral-500 ${compact ? 'w-4 text-sm' : 'text-sm'}`}>
         {showHash ? '#' : ''}{index + 1}
       </span>
-      <button onClick={onMoveDown} disabled={index === total - 1} className={btnClass}>
+      <button onClick={onMoveDown} disabled={disabled || index === total - 1} className={btnClass}>
         <ArrowDown className="h-3 w-3" />
       </button>
     </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import MessageBanner, { type BannerMessage } from '@/components/MessageBanner';
@@ -37,8 +37,10 @@ export default function ProductsPage() {
   const [message, setMessage] = useState<BannerMessage | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<Product | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const { listRef, snapshotPositions } = useFlipAnimation('data-prod-id', products);
-  const { deleteTarget, handleDelete, confirmDelete, cancelDelete } = useConfirmDelete<Product>(
+  const { deleteTarget, handleDelete, confirmDelete, cancelDelete, submitting: deleteSubmitting } = useConfirmDelete<Product>(
     '/api/admin/products',
     {
       onSuccess: () => {
@@ -69,15 +71,23 @@ export default function ProductsPage() {
     .filter((g) => g.products.length > 0);
 
   async function toggleAvailable(prod: Product) {
-    const res = await fetch(`/api/admin/products/${prod.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ available: !prod.available }),
-    });
-    if (res.ok) {
-      load();
-    } else {
-      setMessage({ type: 'error', text: 'Error al cambiar disponibilidad.' });
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/admin/products/${prod.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ available: !prod.available }),
+      });
+      if (res.ok) {
+        load();
+      } else {
+        setMessage({ type: 'error', text: 'Error al cambiar disponibilidad.' });
+      }
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   }
 
@@ -94,45 +104,61 @@ export default function ProductsPage() {
   }
 
   async function moveUp(prod: Product) {
-    const group = groupProducts(prod.category_id);
-    const idx = group.findIndex((p) => p.id === prod.id);
-    if (idx <= 0) return;
-    const above = group[idx - 1];
-    snapshotPositions();
-    await Promise.all([
-      fetch(`/api/admin/products/${prod.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: above.sort_order }),
-      }),
-      fetch(`/api/admin/products/${above.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: prod.sort_order }),
-      }),
-    ]);
-    load();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const group = groupProducts(prod.category_id);
+      const idx = group.findIndex((p) => p.id === prod.id);
+      if (idx <= 0) return;
+      const above = group[idx - 1];
+      snapshotPositions();
+      await Promise.all([
+        fetch(`/api/admin/products/${prod.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: above.sort_order }),
+        }),
+        fetch(`/api/admin/products/${above.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: prod.sort_order }),
+        }),
+      ]);
+      load();
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
   }
 
   async function moveDown(prod: Product) {
-    const group = groupProducts(prod.category_id);
-    const idx = group.findIndex((p) => p.id === prod.id);
-    if (idx === -1 || idx >= group.length - 1) return;
-    const below = group[idx + 1];
-    snapshotPositions();
-    await Promise.all([
-      fetch(`/api/admin/products/${prod.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: below.sort_order }),
-      }),
-      fetch(`/api/admin/products/${below.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sort_order: prod.sort_order }),
-      }),
-    ]);
-    load();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const group = groupProducts(prod.category_id);
+      const idx = group.findIndex((p) => p.id === prod.id);
+      if (idx === -1 || idx >= group.length - 1) return;
+      const below = group[idx + 1];
+      snapshotPositions();
+      await Promise.all([
+        fetch(`/api/admin/products/${prod.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: below.sort_order }),
+        }),
+        fetch(`/api/admin/products/${below.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: prod.sort_order }),
+        }),
+      ]);
+      load();
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
   }
 
   function openCreate() {
@@ -195,12 +221,13 @@ export default function ProductsPage() {
                       return (
                         <tr key={prod.id} data-prod-id={prod.id} className="text-neutral-800">
                           <td className="px-4 py-3">
-                            <ReorderControls
+                             <ReorderControls
                               index={idxInGroup}
                               total={totalInGroup}
                               onMoveUp={() => moveUp(prod)}
                               onMoveDown={() => moveDown(prod)}
                               compact
+                              disabled={submitting}
                             />
                           </td>
                           <td className="px-4 py-3">
@@ -224,7 +251,7 @@ export default function ProductsPage() {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <ToggleSwitch checked={prod.available} onChange={() => toggleAvailable(prod)} />
+                            <ToggleSwitch checked={prod.available} onChange={() => toggleAvailable(prod)} disabled={submitting} />
                           </td>
                           <td className="px-4 py-3 text-right">
                             <ActionButtons
@@ -254,8 +281,9 @@ export default function ProductsPage() {
                           onMoveUp={() => moveUp(prod)}
                           onMoveDown={() => moveDown(prod)}
                           showHash
+                          disabled={submitting}
                         />
-                        <ToggleSwitch checked={prod.available} onChange={() => toggleAvailable(prod)} />
+                        <ToggleSwitch checked={prod.available} onChange={() => toggleAvailable(prod)} disabled={submitting} />
                       </div>
 
                       {/* Body: image + name + price */}
@@ -302,6 +330,7 @@ export default function ProductsPage() {
         message={`¿Eliminar "${deleteTarget?.name}"?`}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
+        disabled={deleteSubmitting}
       />
 
       <ProductDialog

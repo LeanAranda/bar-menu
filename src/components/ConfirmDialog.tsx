@@ -9,6 +9,7 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   variant?: 'danger' | 'default';
+  disabled?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -20,6 +21,7 @@ export default function ConfirmDialog({
   confirmLabel = 'Eliminar',
   cancelLabel = 'Cancelar',
   variant = 'danger',
+  disabled,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -63,13 +65,14 @@ export default function ConfirmDialog({
           <button
             data-autofocus
             onClick={onConfirm}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold text-white hover:cursor-pointer ${
+            disabled={disabled}
+            className={`rounded-lg px-4 py-2 text-sm font-semibold text-white hover:cursor-pointer disabled:opacity-50 ${
               variant === 'danger'
                 ? 'bg-red-600 hover:bg-red-500'
                 : 'bg-orange-600 hover:bg-orange-500'
             }`}
           >
-            {confirmLabel}
+            {disabled ? 'Eliminando...' : confirmLabel}
           </button>
         </div>
       </div>
