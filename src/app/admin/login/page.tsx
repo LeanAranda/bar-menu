@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm rounded-xl border border-neutral-200 bg-white p-8">
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center">
-            <img src="/logos/logo.png" alt="Logo" className="h-full w-full object-contain" />
+            <img src="/logos/logo-1.png" alt="Logo" className="h-full w-full object-contain" />
           </div>
           <h1 className="text-2xl font-bold text-neutral-800">Modo administrador</h1>
         </div>

@@ -30,8 +30,8 @@ export default async function HomePage() {
           />
           <div className="absolute inset-0 z-[1] bg-black/70" />
           <div className="relative z-10 flex flex-col items-center">
-            <div className="mx-auto mb-6 flex h-28 w-28 items-center justify-center">
-              <img src="/logos/logo.png" alt={info.name} className="h-full w-full object-contain" />
+            <div className="mx-auto mb-6 flex h-30 w-30 items-center justify-center">
+              <img src="/logos/logo-1.png" alt={info.name} className="h-full w-full object-contain" />
             </div>
 
             <h1 className="bar-menu-title mb-3 text-5xl font-bold tracking-tight text-white sm:text-5xl">

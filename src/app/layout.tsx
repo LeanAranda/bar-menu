@@ -15,7 +15,7 @@ const slabo = localFont({
 export const metadata: Metadata = {
 	title: "Bar Menu",
 	description: "Bienvenido a Bar Menu. Descubrí nuestras ofertas y seguinos en nuestras redes.",
-	icons: { icon: "/logos/logo-icon.ico" },
+	icons: { icon: "/logos/logo-icon-1.ico" },
 };
 
 export default function RootLayout({

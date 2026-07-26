@@ -4,7 +4,7 @@ export function AdminHeader() {
       <div className="mx-auto flex items-center justify-between pl-10 md:pl-0">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center">
-            <img src="/logos/logo.png" alt="Logo" className="h-full w-full object-contain" />
+            <img src="/logos/logo-1.png" alt="Logo" className="h-full w-full object-contain" />
           </div>
           <a href="/admin/dashboard" className="text-lg font-bold text-neutral-800">Tablero principal</a>
         </div>

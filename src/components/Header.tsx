@@ -7,7 +7,7 @@ export function Header({ name }: { name: string }) {
       <div className="mx-auto flex max-w-5xl items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-15 w-15 items-center justify-center">
-            <img src="/logos/logo.png" alt="" className="h-full w-full object-contain" />
+            <img src="/logos/logo-1.png" alt="" className="h-full w-full object-contain" />
           </div>
           <span className="text-base font-bold text-white">{name}</span>
         </Link>
