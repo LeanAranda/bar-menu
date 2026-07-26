@@ -102,14 +102,14 @@ export default function InfoPage() {
                     value={data[key]}
                     onChange={(e) => setData({ ...data, [key]: e.target.value })}
                     rows={3}
-                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-accent-400 focus:ring-1 focus:ring-accent-400"
                   />
                 ) : (
                   <input
                     type={type || 'text'}
                     value={data[key]}
                     onChange={(e) => setData({ ...data, [key]: e.target.value })}
-                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-accent-400 focus:ring-1 focus:ring-accent-400"
                   />
                 )}
               </div>
@@ -145,7 +145,7 @@ export default function InfoPage() {
                     type="text"
                     value={data[key]}
                     onChange={(e) => setData({ ...data, [key]: e.target.value })}
-                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none transition-colors focus:border-accent-400 focus:ring-1 focus:ring-accent-400"
                   />
                 </div>
               ))}
@@ -157,7 +157,7 @@ export default function InfoPage() {
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg bg-orange-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-orange-500 hover:cursor-pointer disabled:opacity-50"
+            className="rounded-lg bg-accent-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-500 hover:cursor-pointer disabled:opacity-50"
           >
             {saving ? 'Guardando...' : 'Guardar cambios'}
           </button>

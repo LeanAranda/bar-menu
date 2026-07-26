@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { PaletteSwitcher } from './PaletteSwitcher';
 
 export function Header({ name }: { name: string }) {
   return (
@@ -11,14 +12,15 @@ export function Header({ name }: { name: string }) {
           <span className="text-base font-bold text-white">{name}</span>
         </Link>
 
-        <nav className="flex items-center gap-8 text-sm">
-          <Link href="/admin/login" target="_blank" rel="noopener noreferrer" className="text-neutral-400 transition-colors hover:text-orange-500">
+        <nav className="flex items-center gap-4 text-sm">
+          <PaletteSwitcher variant="header" />
+          <Link href="/admin/login" target="_blank" rel="noopener noreferrer" className="text-neutral-400 transition-colors hover:text-accent-500">
             Admin
           </Link>
-          <Link href="/" className="text-neutral-400 transition-colors hover:text-orange-500">
+          <Link href="/" className="text-neutral-400 transition-colors hover:text-accent-500">
             Inicio
           </Link>
-          <Link href="/menu" className="text-neutral-400 transition-colors hover:text-orange-500">
+          <Link href="/menu" className="text-neutral-400 transition-colors hover:text-accent-500">
             Menú
           </Link>
         </nav>

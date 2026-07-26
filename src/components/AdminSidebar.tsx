@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { PaletteSwitcher } from './PaletteSwitcher';
 
 const links = [
   {
@@ -117,7 +118,7 @@ export function AdminSidebar() {
                 onClick={() => { setMobileOpen(false); setExpanded(false); }}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   active
-                    ? 'bg-orange-50 text-orange-700'
+                    ? 'bg-accent-50 text-accent-700'
                     : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800'
                 }`}
                 title={sidebarExpanded ? undefined : label}
@@ -132,11 +133,17 @@ export function AdminSidebar() {
         </nav>
 
         <div className="border-t border-neutral-100 px-3 pt-3">
+          <div className="flex items-center gap-2 px-3 py-1">
+            <PaletteSwitcher variant="sidebar" />
+            {sidebarExpanded && (
+              <span className="text-xs text-neutral-400">Tema</span>
+            )}
+          </div>
           <a
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-neutral-800 transition-colors hover:bg-neutral-100 hover:text-orange-600"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-neutral-800 transition-colors hover:bg-neutral-100 hover:text-accent-600"
             title={sidebarExpanded ? undefined : 'Ver sitio público'}
           >
             <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">

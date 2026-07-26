@@ -182,7 +182,7 @@ export default function ProductsPage() {
         <h1 className="text-2xl font-bold text-neutral-800">Productos</h1>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer"
+          className="flex items-center gap-2 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-500 hover:cursor-pointer"
         >
           + Nuevo producto
         </button>

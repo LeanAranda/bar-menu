@@ -21,7 +21,7 @@ export default function InlineEditField({
         if (e.key === 'Enter') onSave();
         if (e.key === 'Escape') onCancel();
       }}
-      className={`w-full rounded-lg border border-orange-400 text-sm text-neutral-800 outline-none ring-1 ring-orange-400 ${
+      className={`w-full rounded-lg border border-accent-400 text-sm text-neutral-800 outline-none ring-1 ring-accent-400 ${
         mobile ? 'px-3 py-2' : 'px-2 py-1.5'
       }`}
       autoFocus

@@ -11,7 +11,7 @@ export default function ToggleSwitch({ checked, onChange, disabled }: { checked:
       className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
         disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
       } ${
-        checked ? 'bg-orange-500' : 'bg-neutral-300'
+        checked ? 'bg-accent-500' : 'bg-neutral-300'
       }`}
     >
       <span

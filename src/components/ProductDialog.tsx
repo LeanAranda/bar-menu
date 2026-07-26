@@ -207,7 +207,7 @@ export default function ProductDialog({
               name="category_id"
               required
               defaultValue={product?.category_id ?? ''}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-700 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-700 outline-none focus:border-accent-400 focus:ring-1 focus:ring-accent-400"
             >
               <option value="">Seleccionar...</option>
               {categories.map((cat) => (
@@ -223,7 +223,7 @@ export default function ProductDialog({
               placeholder="Nombre del producto"
               required
               defaultValue={product?.name ?? ''}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-accent-400 focus:ring-1 focus:ring-accent-400"
             />
           </div>
 
@@ -234,7 +234,7 @@ export default function ProductDialog({
               rows={3}
               placeholder="Descripción del producto (opcional)"
               defaultValue={product?.description ?? ''}
-              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 resize-none"
+              className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-accent-400 focus:ring-1 focus:ring-accent-400 resize-none"
             />
           </div>
 
@@ -249,7 +249,7 @@ export default function ProductDialog({
                 placeholder="$0"
                 required
                 defaultValue={product?.price ?? ''}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-accent-400 focus:ring-1 focus:ring-accent-400"
               />
             </div>
             <div>
@@ -263,7 +263,7 @@ export default function ProductDialog({
                 value={oldPrice}
                 onChange={(e) => setOldPrice(e.target.value)}
                 disabled={!offer}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-700 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 disabled:bg-neutral-100 disabled:text-neutral-500 disabled:cursor-not-allowed"
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-700 outline-none focus:border-accent-400 focus:ring-1 focus:ring-accent-400 disabled:bg-neutral-100 disabled:text-neutral-500 disabled:cursor-not-allowed"
               />
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function ProductDialog({
               type="checkbox"
               checked={offer}
               onChange={(e) => setOffer(e.target.checked)}
-              className="h-4 w-4 rounded border-neutral-300 text-orange-600 focus:ring-orange-400"
+              className="h-4 w-4 rounded border-neutral-300 text-accent-600 focus:ring-accent-400"
             />
             Marcar como oferta
           </label>
@@ -317,7 +317,7 @@ export default function ProductDialog({
               onClick={() => fileRef.current?.click()}
               className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-5 transition-colors ${
                 dragOver
-                  ? 'border-orange-400 bg-orange-50'
+                  ? 'border-accent-400 bg-accent-50'
                   : 'border-neutral-300 bg-white hover:border-neutral-400 hover:bg-neutral-50'
               }`}
             >
@@ -355,7 +355,7 @@ export default function ProductDialog({
             <button
               type="submit"
               disabled={saving}
-              className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer disabled:opacity-50"
+              className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-500 hover:cursor-pointer disabled:opacity-50"
             >
               {saving ? 'Guardando...' : isEdit ? 'Guardar' : 'Agregar'}
             </button>

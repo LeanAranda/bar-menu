@@ -15,7 +15,26 @@ const iconFiles: Record<string, string> = {
   linkedin: '/icons/icons8-linkedin-50.png',
 };
 
-const orangeFilter = 'brightness(0) saturate(100%) invert(47%) sepia(98%) saturate(1516%) hue-rotate(347deg) brightness(98%) contrast(94%)';
+function AccentIcon({ src, alt }: { src: string; alt: string }) {
+  return (
+    <span
+      className="block h-5 w-5 flex-shrink-0"
+      role="img"
+      aria-label={alt}
+      style={{
+        backgroundColor: 'var(--accent-500)',
+        maskImage: `url(${src})`,
+        WebkitMaskImage: `url(${src})`,
+        maskSize: 'contain',
+        WebkitMaskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        WebkitMaskRepeat: 'no-repeat',
+        maskPosition: 'center',
+        WebkitMaskPosition: 'center',
+      }}
+    />
+  );
+}
 
 export function Footer({ socialLinks, email }: FooterProps) {
   return (
@@ -30,14 +49,9 @@ export function Footer({ socialLinks, email }: FooterProps) {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-orange-500"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-accent-500"
               >
-                <img
-                  src={iconFiles[key]}
-                  alt={key}
-                  className="h-5 w-5"
-                  style={{ filter: orangeFilter }}
-                />
+                <AccentIcon src={iconFiles[key]} alt={key} />
               </a>
             ))}
           </div>
@@ -47,13 +61,8 @@ export function Footer({ socialLinks, email }: FooterProps) {
       {email && (
         <section className="flex flex-col items-center gap-2 px-6 pb-5 pt-6">
           <h2 className="text-lg font-bold text-white">Contacto</h2>
-          <a href={`mailto:${email}`} className="flex items-center gap-2 text-sm text-neutral-400 hover:text-orange-500">
-            <img
-              src={'/icons/icons8-envelope-50.png'}
-              alt={"email"}
-              className="h-5 w-5"
-              style={{ filter: orangeFilter }}
-            />
+          <a href={`mailto:${email}`} className="flex items-center gap-2 text-sm text-neutral-400 hover:text-accent-500">
+            <AccentIcon src="/icons/icons8-envelope-50.png" alt="email" />
             {email}
           </a>
         </section>
@@ -63,7 +72,7 @@ export function Footer({ socialLinks, email }: FooterProps) {
         &copy; Copyright {"Bar Menú"} {2026}
         <br />
         Desarrollado por{' '}
-        <a href="https://www.linkedin.com/in/leandroaranda/" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">
+        <a href="https://www.linkedin.com/in/leandroaranda/" target="_blank" rel="noopener noreferrer" className="text-accent-500 hover:underline">
           Lean Aranda
         </a>
       </div>

@@ -89,7 +89,7 @@ export default function MenuClient({
               value={search}
               onChange={handleSearchChange}
               placeholder="Buscar en el menú..."
-              className="w-full rounded-xl border border-neutral-700 bg-neutral-800 py-2.5 pl-10 pr-10 text-sm text-white placeholder-neutral-400 outline-none transition-all focus:border-orange-500 focus:ring-2 focus:ring-orange-500/40"
+              className="w-full rounded-xl border border-neutral-700 bg-neutral-800 py-2.5 pl-10 pr-10 text-sm text-white placeholder-neutral-400 outline-none transition-all focus:border-accent-500 focus:ring-2 focus:ring-accent-500/40"
             />
             {search.trim() && (
               <button
@@ -110,7 +110,7 @@ export default function MenuClient({
               onChange={handleSelectChange}
               defaultValue=""
               className="flex-1 rounded-xl border border-neutral-700 bg-neutral-800 px-3 py-2.5 text-sm text-white outline-none transition-all 
-              focus:border-orange-500 focus:ring-2 focus:ring-orange-500/40 hover:cursor-pointer"
+              focus:border-accent-500 focus:ring-2 focus:ring-accent-500/40 hover:cursor-pointer"
             >
               <option value="" disabled>Ir a categoría...</option>
               {nonEmptyCategories.map((cat) => (
@@ -122,7 +122,7 @@ export default function MenuClient({
               type="button"
               onClick={() => setView(view === 'list' ? 'grid' : 'list')}
               className="rounded-xl border border-neutral-700 bg-neutral-800 px-3 py-2.5 text-sm text-white transition-colors 
-              hover:cursor-pointer hover:border-orange-500 hover:text-orange-400"
+              hover:cursor-pointer hover:border-accent-500 hover:text-accent-400"
               title={view === 'list' ? 'Vista cuadrícula' : 'Vista lista'}
             >
               {view === 'list' ? (
@@ -138,7 +138,7 @@ export default function MenuClient({
           </div>
 
           {search.trim() && (
-            <p className="mt-2 text-xs text-orange-400 font-medium">
+            <p className="mt-2 text-xs text-accent-400 font-medium">
               {visibleCategories.length > 0
                 ? `${filtered.length} producto${filtered.length !== 1 ? 's' : ''} encontrado${filtered.length !== 1 ? 's' : ''}`
                 : 'Sin resultados'}

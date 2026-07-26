@@ -8,7 +8,7 @@ export function AdminFooter() {
         </p>
         <p className="text-neutral-400">
           Desarrollado por{' '}
-          <a href="https://www.linkedin.com/in/leandroaranda/" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">
+          <a href="https://www.linkedin.com/in/leandroaranda/" target="_blank" rel="noopener noreferrer" className="text-accent-500 hover:underline">
             Lean Aranda
           </a>
         </p>

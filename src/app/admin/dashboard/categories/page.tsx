@@ -202,7 +202,7 @@ export default function CategoriesPage() {
         <h1 className="text-2xl font-bold text-neutral-800">Categorías</h1>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer"
+          className="flex items-center gap-2 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-500 hover:cursor-pointer"
         >
           + Nueva categoría
         </button>
@@ -218,13 +218,13 @@ export default function CategoriesPage() {
             onChange={(e) => setCreateName(e.target.value)}
             placeholder="Nombre de la nueva categoría"
             required
-            className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 md:flex-1"
+            className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-800 outline-none focus:border-accent-400 focus:ring-1 focus:ring-accent-400 md:flex-1"
           />
           <div className="flex gap-2">
             <button
               type="submit"
               disabled={!createName.trim() || submitting}
-              className="flex-1 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 hover:cursor-pointer disabled:opacity-50 md:flex-none"
+              className="flex-1 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-500 hover:cursor-pointer disabled:opacity-50 md:flex-none"
             >
               {submitting ? 'Agregando...' : 'Agregar'}
             </button>
@@ -290,7 +290,7 @@ export default function CategoriesPage() {
                           <button
                             onClick={() => saveEdit(cat)}
                             disabled={!editName.trim() || submitting}
-                            className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-orange-500 hover:cursor-pointer disabled:opacity-50"
+                            className="rounded-lg bg-accent-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-accent-500 hover:cursor-pointer disabled:opacity-50"
                           >
                             Guardar
                           </button>
@@ -348,7 +348,7 @@ export default function CategoriesPage() {
                       <button
                         onClick={() => saveEdit(cat)}
                         disabled={!editName.trim() || submitting}
-                          className="flex-1 rounded-lg bg-orange-600 py-2 text-sm font-semibold text-white hover:bg-orange-500 disabled:opacity-50"
+                          className="flex-1 rounded-lg bg-accent-600 py-2 text-sm font-semibold text-white hover:bg-accent-500 disabled:opacity-50"
                         >
                           Guardar
                       </button>

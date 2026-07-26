@@ -4,7 +4,7 @@ export default function MenuProductCard({ product }: { product: Product }) {
   return (
     <div className="relative flex items-start gap-4 rounded-xl border border-neutral-100 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
       {!!product.is_offer && (
-        <span className="absolute -right-1.5 -top-1.5 rounded-md bg-orange-600 px-2 py-0.5 text-xs font-semibold text-white shadow-sm">
+        <span className="absolute -right-1.5 -top-1.5 rounded-md bg-accent-600 px-2 py-0.5 text-xs font-semibold text-white shadow-sm">
           Oferta
         </span>
       )}
@@ -30,7 +30,7 @@ export default function MenuProductCard({ product }: { product: Product }) {
             <span className="text-sm text-neutral-400 line-through">
               ${Number(product.old_price).toLocaleString('es-AR')}
             </span>
-            <span className="text-xl font-bold text-orange-600">
+            <span className="text-xl font-bold text-accent-600">
               ${Number(product.price).toLocaleString('es-AR')}
             </span>
           </div>

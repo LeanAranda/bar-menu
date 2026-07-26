@@ -24,7 +24,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="es">
+		<html lang="es" suppressHydrationWarning>
+			<head>
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `try{var p=localStorage.getItem('bar-menu-palette');if(p)document.documentElement.dataset.palette=p}catch(e){}`,
+					}}
+				/>
+			</head>
 			<body className={`${geom.variable} ${slabo.variable} antialiased`}>{children}</body>
 		</html>
 	);

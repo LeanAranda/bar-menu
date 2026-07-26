@@ -20,7 +20,7 @@ export default function ProductPrice({
         </span>
       )}
       {isOffer && (
-        <span className="rounded bg-orange-50 px-1.5 py-0.5 text-xs font-medium text-orange-600">
+        <span className="rounded bg-accent-50 px-1.5 py-0.5 text-xs font-medium text-accent-600">
           Oferta
         </span>
       )}
